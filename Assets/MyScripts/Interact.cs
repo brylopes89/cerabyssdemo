@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; //now gives you access to the function of level load
 
-public class Interact : MonoBehaviour {
+public class Interact : MonoBehaviour
+{
+
+    public GameObject characterObj;
 
     public float rayLength;
 
@@ -23,23 +26,23 @@ public class Interact : MonoBehaviour {
 
     private bool isDoorOpening;
 
-    public Animator animLeft, animRight; 
+    public Animator animLeft, animRight;
 
     // Update is called once per frame
     void Update()
     {
         Debug.DrawRay(transform.position, transform.forward * rayLength, Color.blue); //sets the raycast
-       
+
         // If we hit something...
         if (Physics.Raycast(transform.position, transform.forward, out objectHit, rayLength, layerMask))
         {
-           // print("I hit " + objectHit.transform.name); //this is one way to print the objectHit name. Could also use objectHit.collider.name
+            // print("I hit " + objectHit.transform.name); //this is one way to print the objectHit name. Could also use objectHit.collider.name
 
             if (Input.GetKeyDown(KeyCode.E))
             {
                 ObjInteraction(curObj);
             }
-            
+
 
             if (curObj == null) // == is a check. IF we hit something, and curObj is not assigned a gameobject, then...
             {
@@ -64,33 +67,42 @@ public class Interact : MonoBehaviour {
             {
                 NullifyCurObj();
             }
-        }    
+        }
     }
 
     void NullifyCurObj()
     {
-            curObj.GetComponent<Renderer>().material = savedMaterial;
+        curObj.GetComponent<Renderer>().material = savedMaterial;
 
-            curObj = null;
+        curObj = null;
     }
 
     void ObjInteraction(GameObject objFromRaycast)
     {
-
-        timer -= Time.deltaTime;
-
-
-       if (objFromRaycast.tag == "Door" && !isDoorOpening)
-          {
+        if (objFromRaycast.tag == "Door" && !isDoorOpening)
+        {
 
             isDoorOpening = true;
 
             animRight.Play("Church_Door_B");
             animLeft.Play("Church_Door_A");
             // SceneManager.LoadScene("Flooded_Grounds");
-          }
 
-    
+            StartCoroutine(TransitionToNewScene());
+        }
+
+    }
+
+    IEnumerator TransitionToNewScene()
+    {
+        yield return new WaitForSeconds(5);
+
+        yield return new WaitForFixedUpdate();
+
+        GameObject spawnPoint = GameObject.Find("SpawnPoint");
+
+        characterObj.transform.parent = spawnPoint.transform;
+        characterObj.transform.SetPositionAndRotation(spawnPoint.transform.position, spawnPoint.transform.rotation);
     }
 
 }
