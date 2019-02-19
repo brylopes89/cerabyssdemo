@@ -19,6 +19,12 @@ public class Interact : MonoBehaviour {
 
     public int keysNeeded;
 
+    public float timer;
+
+    private bool isDoorOpening;
+
+    public Animator animLeft, animRight; 
+
     // Update is called once per frame
     void Update()
     {
@@ -70,29 +76,21 @@ public class Interact : MonoBehaviour {
 
     void ObjInteraction(GameObject objFromRaycast)
     {
-        /*if (objFromRaycast.tag == "Key")
-        {
-            PlayerInventory.keyCount++;
 
-            print("I have " + PlayerInventory.keyCount + " keys!");
+        timer -= Time.deltaTime;
 
-            Destroy(objFromRaycast);
 
-        } */
+       if (objFromRaycast.tag == "Door" && !isDoorOpening)
+          {
 
-       /* if (objFromRaycast.tag == "Door")
-        {
-           // if (PlayerInventory.keyCount >= keysNeeded)
-           // {
-            //    PlayerInventory.keyCount = 0;
-            SceneManager.LoadScene("Flooded_Grounds");
-        }
+            isDoorOpening = true;
 
-        /* else
-         {
-              print("I still need " + (keysNeeded - PlayerInventory.keyCount) + " keys!");
-         }
-      } */
+            animRight.Play("Church_Door_B");
+            animLeft.Play("Church_Door_A");
+            // SceneManager.LoadScene("Flooded_Grounds");
+          }
+
+    
     }
 
 }

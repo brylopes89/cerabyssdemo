@@ -5,7 +5,7 @@ using UnityEngine;
 public class animController : MonoBehaviour {
 
     public Animator anim;
-    float timer = 10f;
+    float timer = 5f;
 
     // Use this for initialization
     void Start ()
@@ -22,12 +22,12 @@ public class animController : MonoBehaviour {
         {
             anim.Play("Church_Door_B");
             anim.Play("Church_Door_A");
-        }        
 
-        if (timer <= 0)
-        {
-            Application.LoadLevel("Flooded_Grounds");
-        }
+            if (timer <= 0)
+            {
+                Application.LoadLevel("Flooded_Grounds");
+            }
+        }        
 
 
     }
